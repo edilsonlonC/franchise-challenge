@@ -10,5 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface BranchMapper {
     BranchEntity branchModelToBranchEntity(BranchModel branch);
     @Mapping(target = "franchise", ignore = true)
-    BranchModel BranchEntityToBranchModel(BranchEntity branch);
+    @Mapping(target = "products", ignore = true)
+    BranchModel branchEntityToBranchModel(BranchEntity branch);
 }

@@ -5,6 +5,8 @@ import com.challenge.franchise.application.useCases.ProductUseCase;
 import com.challenge.franchise.domain.models.BranchModel;
 import com.challenge.franchise.domain.models.ProductModel;
 import com.challenge.franchise.infrastructure.api.dto.ProductCreateDto;
+import com.challenge.franchise.infrastructure.api.dto.ProductResponseDto;
+import com.challenge.franchise.infrastructure.api.dto.ProductUpdateStockDto;
 import com.challenge.franchise.infrastructure.mapper.ProductDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +33,6 @@ public class ProductController {
        productModel.setName(productCreateDto.getName());
        productModel.setQuantity(productCreateDto.getQuantity());
        productModel.setBranch(branchModel.get());
-
        return new ResponseEntity<>(
               productDtoMapper.productModelToProductResponseDto(
                       productUseCase.create(productModel)
@@ -38,8 +40,24 @@ public class ProductController {
               HttpStatus.CREATED
        );
    }
-   @GetMapping
-    public ResponseEntity<List<ProductModel>> findAll() {
-       return new ResponseEntity<>(productUseCase.findAll() , HttpStatus.OK);
+
+
+   @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+       boolean isDeleted = productUseCase.delete(id);
+       if(!isDeleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found");
+       return new ResponseEntity<>(HttpStatus.OK);
+   }
+
+   @PutMapping
+    public ResponseEntity<?> updateStock(@RequestBody ProductUpdateStockDto productUpdateStockDto) {
+        boolean isModified = productUseCase.modifyStock(productUpdateStockDto.getId(), productUpdateStockDto.getQuantity());
+        if (!isModified) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.OK);
+   }
+   @GetMapping("/top/{franchiseId}")
+    public ResponseEntity<List<ProductResponseDto>> findTop(@PathVariable("franchiseId") Long franchiseId){
+               return new ResponseEntity<>( productUseCase.findTopProducts(franchiseId).stream()
+                       .map(p -> productDtoMapper.productModelToProductResponseDto(p) ).collect(Collectors.toList()), HttpStatus.OK);
    }
 }

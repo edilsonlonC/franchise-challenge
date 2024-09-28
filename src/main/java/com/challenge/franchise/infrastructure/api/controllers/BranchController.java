@@ -29,13 +29,12 @@ public class BranchController {
     public ResponseEntity<BranchResponseDto> createBranch (@RequestBody BranchCreateDto branchCreateDto) {
         Optional<FranchiseModel> franchiseResult = franchiseUseCase.findById(branchCreateDto.getFranchiseId());
         if(franchiseResult.isEmpty()) throw  new ResponseStatusException( HttpStatus.NOT_FOUND, "Franchise not found");
-        BranchModel branchModel  = new BranchModel();
-        branchModel.setFranchise(franchiseResult.get());
+        BranchModel branchModel = new BranchModel();
         branchModel.setName(branchCreateDto.getName());
-       return new ResponseEntity<>(
-               branchDtoMapper.branchModelToBranchDtoResponse(
-                       branchUseCase.createBranch(branchModel)
-               ), HttpStatus.CREATED
-       );
+        branchModel.setFranchise(franchiseResult.get());
+        return new ResponseEntity<>(branchDtoMapper.branchModelToBranchDtoResponse(
+                branchUseCase.createBranch(branchModel)
+        ), HttpStatus.CREATED);
+
     }
 }

@@ -22,8 +22,8 @@ public class BranchRepositoryImpl implements BranchRepository {
     public BranchModel create(BranchModel branchModel) {
         BranchEntity branchEntity = branchMapper.branchModelToBranchEntity(branchModel);
         FranchiseEntity franchiseEntity = franchiseMapper.franchiseModelToFranchiseEntity(branchModel.getFranchise());
-        branchEntity.setFranchise(franchiseEntity);
-       return branchMapper.BranchEntityToBranchModel(
+        //branchEntity.setFranchise(franchiseEntity);
+       return branchMapper.branchEntityToBranchModel(
                branchJpaRepository.save(branchEntity)
        );
     }
@@ -32,7 +32,7 @@ public class BranchRepositoryImpl implements BranchRepository {
     public Optional<BranchModel> findById(Long id) {
         Optional<BranchEntity> branchEntityResult = branchJpaRepository.findById(id);
         return branchEntityResult.isPresent()
-                ? Optional.of(branchMapper.BranchEntityToBranchModel(
+                ? Optional.of(branchMapper.branchEntityToBranchModel(
                         branchEntityResult.get()
         )): Optional.empty();
     }
