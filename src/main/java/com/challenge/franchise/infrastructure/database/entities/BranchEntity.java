@@ -15,9 +15,9 @@ public class BranchEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "branch",cascade = CascadeType.ALL)
     private List<ProductEntity> products;
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "franchise_id")
     private FranchiseEntity franchise;
 }

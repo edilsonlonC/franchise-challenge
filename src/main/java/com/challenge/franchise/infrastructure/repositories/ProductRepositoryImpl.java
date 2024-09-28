@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -22,6 +23,39 @@ public class ProductRepositoryImpl implements ProductRepository {
         ProductEntity productEntity =  productMapper.productModelToProductEntity(product);
         ProductModel productModel = productMapper.productEntityToProductModel(productJpaRepository.save(productEntity));
         return  productModel;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        Optional<ProductEntity>  productEntityResult = productJpaRepository.findById(id);
+        if (productEntityResult.isEmpty()) return false;
+        productJpaRepository.delete(productEntityResult.get());
+        return true;
+    }
+
+    @Override
+    public Optional<ProductModel> findById(Long id) {
+        Optional<ProductEntity> productEntityResult = productJpaRepository.findById(id);
+        return productEntityResult.isPresent()
+                ? Optional.of(productMapper.productEntityToProductModel(productEntityResult.get()))
+                : Optional.empty();
+    }
+
+    @Override
+    public ProductModel update(ProductModel product) {
+        return productMapper.productEntityToProductModel(
+                productJpaRepository.save(
+                        productMapper.productModelToProductEntity(product)
+                )
+        );
+    }
+
+    @Override
+    public List<ProductModel> findTopProductsByStock(Long franchiseId) {
+        return productJpaRepository.findTopProductsByQuantity(franchiseId)
+                .stream()
+                .map(p -> productMapper.productEntityToProductModel(p))
+                .collect(Collectors.toList());
     }
 
 

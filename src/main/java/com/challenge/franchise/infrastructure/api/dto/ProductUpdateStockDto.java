@@ -2,16 +2,12 @@ package com.challenge.franchise.infrastructure.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class ProductResponseDto {
+public class ProductUpdateStockDto {
     private Long id;
-    private String name;
     private int quantity;
-    private BranchResponseDto branch;
 }

@@ -5,7 +5,7 @@ import com.challenge.franchise.infrastructure.api.dto.ProductCreateDto;
 import com.challenge.franchise.infrastructure.api.dto.ProductResponseDto;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = BranchDtoMapper.class)
 public interface ProductDtoMapper {
     ProductModel productCreateDtoToProductModel(ProductCreateDto product);
     ProductResponseDto productModelToProductResponseDto (ProductModel product);
