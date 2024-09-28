@@ -1,4 +1,4 @@
-package com.challenge.franchise.domain.models;
+package com.challenge.franchise.infrastructure.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductModel {
+public class ProductResponseDto {
     private Long id;
     private String name;
-    private  int quantity;
-    private BranchModel branch;
+    private int quantity;
 }

@@ -10,6 +10,8 @@ import com.challenge.franchise.infrastructure.mapper.FranchiseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class BranchRepositoryImpl implements BranchRepository {
@@ -24,5 +26,14 @@ public class BranchRepositoryImpl implements BranchRepository {
        return branchMapper.BranchEntityToBranchModel(
                branchJpaRepository.save(branchEntity)
        );
+    }
+
+    @Override
+    public Optional<BranchModel> findById(Long id) {
+        Optional<BranchEntity> branchEntityResult = branchJpaRepository.findById(id);
+        return branchEntityResult.isPresent()
+                ? Optional.of(branchMapper.BranchEntityToBranchModel(
+                        branchEntityResult.get()
+        )): Optional.empty();
     }
 }
