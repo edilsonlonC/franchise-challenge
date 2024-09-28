@@ -6,14 +6,12 @@ import com.challenge.franchise.domain.models.BranchModel;
 import com.challenge.franchise.domain.models.FranchiseModel;
 import com.challenge.franchise.infrastructure.api.dto.BranchCreateDto;
 import com.challenge.franchise.infrastructure.api.dto.BranchResponseDto;
+import com.challenge.franchise.infrastructure.api.dto.BranchUpdateDto;
 import com.challenge.franchise.infrastructure.mapper.BranchDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -36,5 +34,17 @@ public class BranchController {
                 branchUseCase.createBranch(branchModel)
         ), HttpStatus.CREATED);
 
+    }
+    @PutMapping
+    public ResponseEntity<BranchResponseDto> updateBranch(@RequestBody BranchUpdateDto branchUpdateDto) {
+        Optional<BranchModel> branchModelResult = branchUseCase.findById(branchUpdateDto.getId());
+        if(branchModelResult.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        BranchModel branchModel = branchModelResult.get();
+        branchModel.setName(branchUpdateDto.getName());
+        return new ResponseEntity<>(
+                branchDtoMapper.branchModelToBranchDtoResponse(
+                       branchUseCase.createBranch(branchModel)
+                ), HttpStatus.OK
+        );
     }
 }
