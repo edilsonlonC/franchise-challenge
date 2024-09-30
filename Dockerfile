@@ -1,5 +1,8 @@
-FROM openjdk:17-jdk-slim-buster
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-EXPOSE 3001
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM openjdk:17-jdk-alpine
+RUN apk --no-cache add curl maven
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:resolve
+COPY src src
+RUN mvn package -DskipTests
+ENTRYPOINT ["java", "-jar", "target/franchise-0.0.1-SNAPSHOT.jar"]
