@@ -31,5 +31,8 @@ public class ProductUseCase {
     public List<ProductModel> findTopProducts(Long franchiseId){
        return productRepository.findTopProductsByStock(franchiseId);
     }
+    public Optional<ProductModel> findById(Long productId) {
+        return productRepository.findById(productId);
+    }
 
 }

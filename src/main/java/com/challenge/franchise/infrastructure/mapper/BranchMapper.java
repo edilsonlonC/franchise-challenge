@@ -6,10 +6,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = FranchiseMapper.class)
 public interface BranchMapper {
     BranchEntity branchModelToBranchEntity(BranchModel branch);
-    @Mapping(target = "franchise", ignore = true)
     @Mapping(target = "products", ignore = true)
     BranchModel branchEntityToBranchModel(BranchEntity branch);
 }

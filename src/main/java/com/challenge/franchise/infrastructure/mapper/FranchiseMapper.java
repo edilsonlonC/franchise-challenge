@@ -11,6 +11,6 @@ import org.mapstruct.factory.Mappers;
 public interface FranchiseMapper {
     @Mapping(target = "branches", ignore = true)
     FranchiseModel franchiseEntityToFranchiseModel(FranchiseEntity franchise);
-
+    @Mapping(target = "branches", ignore = true)
     FranchiseEntity franchiseModelToFranchiseEntity(FranchiseModel franchise);
 }
