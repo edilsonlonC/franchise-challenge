@@ -1,7 +1,5 @@
 package com.challenge.franchise.infrastructure.api.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BranchCreateDto {
-    @NotBlank(message = "Name is required")
+public class ProductUpdateDto {
+    private Long id;
     private String name;
-    @NotNull(message = "Franchise id is required")
-    private Long franchiseId;
 }

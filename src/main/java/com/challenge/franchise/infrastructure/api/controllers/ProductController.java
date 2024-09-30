@@ -6,8 +6,10 @@ import com.challenge.franchise.domain.models.BranchModel;
 import com.challenge.franchise.domain.models.ProductModel;
 import com.challenge.franchise.infrastructure.api.dto.ProductCreateDto;
 import com.challenge.franchise.infrastructure.api.dto.ProductResponseDto;
+import com.challenge.franchise.infrastructure.api.dto.ProductUpdateDto;
 import com.challenge.franchise.infrastructure.api.dto.ProductUpdateStockDto;
 import com.challenge.franchise.infrastructure.mapper.ProductDtoMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +51,8 @@ public class ProductController {
        return new ResponseEntity<>(HttpStatus.OK);
    }
 
-   @PutMapping
-    public ResponseEntity<?> updateStock(@RequestBody ProductUpdateStockDto productUpdateStockDto) {
+   @PutMapping("/stock")
+    public ResponseEntity<?> updateStock(@Valid @RequestBody ProductUpdateStockDto productUpdateStockDto) {
         boolean isModified = productUseCase.modifyStock(productUpdateStockDto.getId(), productUpdateStockDto.getQuantity());
         if (!isModified) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -59,5 +61,19 @@ public class ProductController {
     public ResponseEntity<List<ProductResponseDto>> findTop(@PathVariable("franchiseId") Long franchiseId){
                return new ResponseEntity<>( productUseCase.findTopProducts(franchiseId).stream()
                        .map(p -> productDtoMapper.productModelToProductResponseDto(p) ).collect(Collectors.toList()), HttpStatus.OK);
+   }
+
+   @PutMapping()
+    public ResponseEntity<ProductResponseDto> update (@RequestBody ProductUpdateDto productUpdateDto){
+       Optional<ProductModel> productModelResult = productUseCase.findById(productUpdateDto.getId());
+       if(productModelResult.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+       ProductModel productModel = productModelResult.get();
+       productModel.setName(productUpdateDto.getName());
+       return new ResponseEntity<>(
+               productDtoMapper.productModelToProductResponseDto(
+                       productUseCase.create(productModel)
+               ), HttpStatus.OK
+       );
+
    }
 }

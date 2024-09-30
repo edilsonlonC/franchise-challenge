@@ -8,6 +8,7 @@ import com.challenge.franchise.infrastructure.api.dto.BranchCreateDto;
 import com.challenge.franchise.infrastructure.api.dto.BranchResponseDto;
 import com.challenge.franchise.infrastructure.api.dto.BranchUpdateDto;
 import com.challenge.franchise.infrastructure.mapper.BranchDtoMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class BranchController {
     private final BranchUseCase branchUseCase;
     private final BranchDtoMapper branchDtoMapper;
     @PostMapping
-    public ResponseEntity<BranchResponseDto> createBranch (@RequestBody BranchCreateDto branchCreateDto) {
+    public ResponseEntity<BranchResponseDto> createBranch (@Valid  @RequestBody BranchCreateDto branchCreateDto) {
         Optional<FranchiseModel> franchiseResult = franchiseUseCase.findById(branchCreateDto.getFranchiseId());
         if(franchiseResult.isEmpty()) throw  new ResponseStatusException( HttpStatus.NOT_FOUND, "Franchise not found");
         BranchModel branchModel = new BranchModel();
